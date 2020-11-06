@@ -17,8 +17,8 @@ fi
 
 if [ "${target}" = "pi1" ]; then
   emulator=qemu-system-arm
-  kernel="/root/qemu-rpi-kernel/kernel-qemu-4.19.50-buster"
-  dtb="/root/qemu-rpi-kernel/versatile-pb.dtb"
+  kernel="/root/qemu-rpi-kernel/kernel-qemu-5.4.51-buster"
+  dtb="/root/qemu-rpi-kernel/versatile-pb-buster-5.4.51.dtb"
   machine=versatilepb
   memory=256m
   root=/dev/sda2
@@ -80,5 +80,5 @@ exec ${emulator} \
   --kernel "${kernel}" \
   --append "rw earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 root=${root} rootwait panic=1" \
   --no-reboot \
-  --display none \
+  --vnc :0 \
   --serial mon:stdio
