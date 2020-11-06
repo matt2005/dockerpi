@@ -1,6 +1,6 @@
 # Build stage for qemu-system-arm
 FROM debian:stable-slim AS qemu-builder
-ARG QEMU_VERSION=4.2.0
+ARG QEMU_VERSION=5.2.0-rc0
 ENV QEMU_TARBALL="qemu-${QEMU_VERSION}.tar.xz"
 WORKDIR /qemu
 
@@ -62,8 +62,8 @@ RUN make -j$(nproc)
 # Build the dockerpi VM image
 FROM busybox:1.31 AS dockerpi-vm
 LABEL maintainer="Luke Childs <lukechilds123@gmail.com>"
-ARG RPI_KERNEL_URL="https://github.com/dhruvvyas90/qemu-rpi-kernel/archive/afe411f2c9b04730bcc6b2168cdc9adca224227c.zip"
-ARG RPI_KERNEL_CHECKSUM="295a22f1cd49ab51b9e7192103ee7c917624b063cc5ca2e11434164638aad5f4"
+ARG RPI_KERNEL_URL="https://github.com/dhruvvyas90/qemu-rpi-kernel/archive/061a3853cf2e2390046d163d90181bde1c4cd78f.zip"
+ARG RPI_KERNEL_CHECKSUM="9c025966da815798e536e76036003d4dfbf2b0e3c4c3cddae3caa3c2fe1ac9cd"
 
 COPY --from=qemu-builder /qemu/arm-softmmu/qemu-system-arm /usr/local/bin/qemu-system-arm
 COPY --from=qemu-builder /qemu/aarch64-softmmu/qemu-system-aarch64 /usr/local/bin/qemu-system-aarch64
@@ -75,8 +75,8 @@ RUN cd /tmp && \
     echo "$RPI_KERNEL_CHECKSUM  qemu-rpi-kernel.zip" | sha256sum -c && \
     unzip qemu-rpi-kernel.zip && \
     mkdir -p /root/qemu-rpi-kernel && \
-    cp qemu-rpi-kernel-*/kernel-qemu-4.19.50-buster /root/qemu-rpi-kernel/ && \
-    cp qemu-rpi-kernel-*/versatile-pb.dtb /root/qemu-rpi-kernel/ && \
+    cp qemu-rpi-kernel-*/kernel-qemu-5.4.51-buster /root/qemu-rpi-kernel/ && \
+    cp qemu-rpi-kernel-*/versatile-pb-buster-5.4.51.dtb /root/qemu-rpi-kernel/ && \
     rm -rf /tmp/*
 
 VOLUME /sdcard
